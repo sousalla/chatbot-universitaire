@@ -1,0 +1,65 @@
+<!-- frontend/templates/about.html -->
+{% extends "base.html" %}
+
+{% block title %}UniBot - À propos{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-primary text-white rounded-top-4 py-3">
+                    <h4 class="mb-0"><i class="fas fa-info-circle me-2"></i>À propos d'UniBot</h4>
+                </div>
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-robot fa-4x text-primary"></i>
+                        <h2 class="mt-3">UniBot</h2>
+                        <p class="text-muted">Assistant Universitaire Intelligent</p>
+                    </div>
+                    
+                    <h5><i class="fas fa-graduation-cap me-2 text-primary"></i>Objectif du projet</h5>
+                    <p>UniBot est un chatbot intelligent conçu pour assister les étudiants de la Faculté Polydisciplinaire de Béni Mellal. Il utilise l'architecture RAG pour fournir des réponses précises aux questions des étudiants.</p>
+                    
+                    <h5 class="mt-4"><i class="fas fa-microchip me-2 text-primary"></i>Technologies utilisées</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Python 3.10+</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Flask (Backend)</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Bootstrap 5 (Frontend)</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Sentence-Transformers</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check-circle text-success me-2"></i>ChromaDB (Vector DB)</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Architecture RAG</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>API REST</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>JavaScript</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <h5 class="mt-4"><i class="fas fa-project-diagram me-2 text-primary"></i>Architecture RAG</h5>
+                    <div class="alert alert-light border">
+                        <div class="text-center">
+                            <p><strong>📚 Phase d'indexation</strong></p>
+                            <p>Documents → Chunks → Embeddings → ChromaDB</p>
+                            <hr>
+                            <p><strong>💬 Phase de génération</strong></p>
+                            <p>Question → Embedding → Recherche → Contexte → Réponse</p>
+                        </div>
+                    </div>
+                    
+                    <h5 class="mt-4"><i class="fas fa-user-graduate me-2 text-primary"></i>Réalisé par</h5>
+                    <p><strong>AALLA Soufiane</strong><br>Master Data Science et Sécurité des Systèmes d'Information (D3SI)</p>
+                    
+                    <h5 class="mt-4"><i class="fas fa-chalkboard-user me-2 text-primary"></i>Encadré par</h5>
+                    <p><strong>Pr. Ismail KICH</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

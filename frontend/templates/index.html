@@ -1,0 +1,459 @@
+<!-- frontend/templates/index.html -->
+{% extends "base.html" %}
+
+{% block title %}UniBot - Chat{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            
+            {% if session.get('user') %}
+            
+            <!-- Interface de chat (utilisateur connecté) -->
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                <div class="card-header bg-primary text-white py-3">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <div class="rounded-circle bg-white p-2 me-3">
+                                <i class="fas fa-robot text-primary fa-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="mb-0 fw-bold">UniBot</h4>
+                                <small>Assistant Universitaire Intelligent</small>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="badge bg-light text-dark me-2">
+                                <i class="fas fa-user me-1"></i> {{ session.user.name }}
+                            </span>
+                            <a href="{{ url_for('main.clear_history') }}" class="btn btn-sm btn-outline-light rounded-pill me-1" onclick="return confirm('Effacer l\'historique ?')">
+                                <i class="fas fa-trash-alt me-1"></i> Effacer
+                            </a>
+                            <a href="{{ url_for('main.logout') }}" class="btn btn-sm btn-outline-light rounded-pill">
+                                <i class="fas fa-sign-out-alt me-1"></i> Déconnexion
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Zone des messages -->
+                <div id="chatContainer" class="card-body p-0" style="height: 450px; background-color: #ffffff; overflow-y: auto;">
+                    <div id="messagesArea" class="p-4">
+                        {% if session.chat_history %}
+                            {% for msg in session.chat_history %}
+                                <!-- Message utilisateur -->
+                                <div class="d-flex mb-3 justify-content-end">
+                                    <div class="bg-primary text-white rounded-3 p-3" style="max-width: 75%;">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-user me-2"></i>
+                                            <span>{{ msg.user }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Message bot -->
+                                <div class="d-flex mb-3 justify-content-start">
+                                    <div class="bg-light border rounded-3 p-3 shadow-sm" style="max-width: 75%;">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-robot text-primary me-2"></i>
+                                            <strong class="text-primary">UniBot</strong>
+                                        </div>
+                                        <div>{{ msg.bot }}</div>
+                                        {% if msg.confidence %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div id="welcomeMessage" class="text-center py-5">
+                                <div class="mb-4">
+                                    <i class="fas fa-robot fa-5x text-primary opacity-50"></i>
+                                </div>
+                                <h5 class="text-secondary">Bienvenue sur UniBot, {{ session.user.name }} !</h5>
+                                <p class="text-muted">
+                                    Je suis un assistant universitaire intelligent.<br>
+                                    Posez-moi vos questions sur la scolarité, les inscriptions,<br>
+                                    les relevés de notes, les horaires, les bourses...
+                                </p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Zone de saisie -->
+                <div class="card-footer bg-white p-3 border-0">
+                    <div class="input-group">
+                        <input type="text" 
+                               id="userMessage" 
+                               class="form-control form-control-lg rounded-pill" 
+                               placeholder="Posez votre question"
+                               autocomplete="off"
+                               style="border: 1px solid #dee2e6;">
+                        <button id="sendBtn" class="btn btn-primary rounded-pill px-4 ms-2">
+                            <i class="fas fa-paper-plane"></i> Envoyer
+                        </button>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <small class="text-muted" id="typingIndicator" style="display: none;">
+                            <i class="fas fa-spinner fa-spin me-1"></i> UniBot écrit...
+                        </small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Questions rapides -->
+            <div class="row g-2 mt-3">
+                <div class="col-md-2 col-4">
+                    <button class="btn btn-outline-primary w-100 quick-btn btn-sm quick-question" data-question="Comment obtenir mon relevé de notes ?">
+                        <i class="fas fa-file-alt me-1"></i> Relevé
+                    </button>
+                </div>
+                <div class="col-md-2 col-4">
+                    <button class="btn btn-outline-primary w-100 quick-btn btn-sm quick-question" data-question="Comment s'inscrire à l'université ?">
+                        <i class="fas fa-edit me-1"></i> Inscription
+                    </button>
+                </div>
+                <div class="col-md-2 col-4">
+                    <button class="btn btn-outline-primary w-100 quick-btn btn-sm quick-question" data-question="Quels sont les horaires de la bibliothèque ?">
+                        <i class="fas fa-clock me-1"></i> Horaires BU
+                    </button>
+                </div>
+                <div class="col-md-2 col-4">
+                    <button class="btn btn-outline-primary w-100 quick-btn btn-sm quick-question" data-question="Comment obtenir une bourse ?">
+                        <i class="fas fa-euro-sign me-1"></i> Bourse
+                    </button>
+                </div>
+                <div class="col-md-2 col-4">
+                    <button class="btn btn-outline-primary w-100 quick-btn btn-sm quick-question" data-question="Où trouver l'emploi du temps ?">
+                        <i class="fas fa-calendar me-1"></i> EDT
+                    </button>
+                </div>
+                <div class="col-md-2 col-4">
+                    <button class="btn btn-outline-primary w-100 quick-btn btn-sm quick-question" data-question="Comment contacter le secrétariat ?">
+                        <i class="fas fa-phone me-1"></i> Contact
+                    </button>
+                </div>
+            </div>
+            
+            {% else %}
+            
+            <!-- Formulaire de connexion / inscription -->
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-primary text-white rounded-top-4 py-3">
+                    <h4 class="mb-0 text-center">
+                        <i class="fas fa-robot me-2"></i> UniBot
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <ul class="nav nav-tabs nav-justified mb-4" id="authTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login-pane" type="button" role="tab">
+                                <i class="fas fa-sign-in-alt me-2"></i>Connexion
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register-pane" type="button" role="tab">
+                                <i class="fas fa-user-plus me-2"></i>Inscription
+                            </button>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="login-pane" role="tabpanel">
+                            <form method="POST" action="{{ url_for('main.login') }}">
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" name="email" class="form-control rounded-pill" placeholder="exemple@usms.ac.ma" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Mot de passe</label>
+                                    <input type="password" name="password" class="form-control rounded-pill" placeholder="••••••••" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100 rounded-pill py-2">
+                                    <i class="fas fa-sign-in-alt me-2"></i> Se connecter
+                                </button>
+                            </form>
+                            <hr class="my-4">
+                        </div>
+                        
+                        <div class="tab-pane fade" id="register-pane" role="tabpanel">
+                            <form method="POST" action="{{ url_for('main.register') }}">
+                                <div class="mb-3">
+                                    <label class="form-label">Nom complet</label>
+                                    <input type="text" name="name" class="form-control rounded-pill" placeholder="Nom complet" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" name="email" class="form-control rounded-pill" placeholder="exemple@usms.ac.ma" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Mot de passe</label>
+                                    <input type="password" name="password" class="form-control rounded-pill" placeholder="•••••••• (min. 6 caractères)" required>
+                                </div>
+                                <button type="submit" class="btn btn-success w-100 rounded-pill py-2">
+                                    <i class="fas fa-user-plus me-2"></i> Créer mon compte
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            {% endif %}
+            
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #ffffff !important;
+    }
+    
+    .quick-btn {
+        transition: all 0.2s ease;
+        border-radius: 20px !important;
+    }
+    .quick-btn:hover {
+        transform: translateY(-2px);
+        background-color: #0d6efd;
+        color: white;
+        border-color: #0d6efd;
+    }
+    
+    /* Animation pour les messages */
+    .message-animation {
+        animation: fadeInUp 0.3s ease-out;
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Scrollbar personnalisée */
+    #chatContainer::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    #chatContainer::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+    
+    #chatContainer::-webkit-scrollbar-thumb {
+        background: #0d6efd;
+        border-radius: 10px;
+    }
+    
+    #chatContainer::-webkit-scrollbar-thumb:hover {
+        background: #0b5ed7;
+    }
+    
+    .typing-dots {
+        display: inline-flex;
+        gap: 4px;
+        align-items: center;
+    }
+    
+    .typing-dots span {
+        width: 6px;
+        height: 6px;
+        background-color: #6c757d;
+        border-radius: 50%;
+        animation: typing 1.4s infinite ease-in-out;
+    }
+    
+    .typing-dots span:nth-child(1) { animation-delay: 0s; }
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    
+    @keyframes typing {
+        0%, 60%, 100% {
+            transform: translateY(0);
+            opacity: 0.4;
+        }
+        30% {
+            transform: translateY(-6px);
+            opacity: 1;
+        }
+    }
+</style>
+
+<script>
+    // Attendre que le DOM soit chargé
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        const sendBtn = document.getElementById('sendBtn');
+        const userInput = document.getElementById('userMessage');
+        const messagesArea = document.getElementById('messagesArea');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+        const chatContainer = document.getElementById('chatContainer');
+        
+        // Vérifier si l'utilisateur est connecté (éléments existent)
+        if (!sendBtn || !userInput) return;
+        
+        // Fonction pour ajouter un message
+        function addMessage(text, sender, confidence = null) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `d-flex mb-3 ${sender === 'user' ? 'justify-content-end' : 'justify-content-start'} message-animation`;
+            
+            if (sender === 'user') {
+                messageDiv.innerHTML = `
+                    <div class="bg-primary text-white rounded-3 p-3" style="max-width: 75%;">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-user me-2"></i>
+                            <span>${escapeHtml(text)}</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                let confidenceHtml = '';
+                if (confidence) {
+                    confidenceHtml = `<div class="mt-2"><small class="text-muted">Confiance: ${Math.round(confidence * 100)}%</small></div>`;
+                }
+                messageDiv.innerHTML = `
+                    <div class="bg-light border rounded-3 p-3 shadow-sm" style="max-width: 75%;">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-robot text-primary me-2"></i>
+                            <strong class="text-primary">UniBot</strong>
+                        </div>
+                        <div>${escapeHtml(text)}</div>
+                        ${confidenceHtml}
+                    </div>
+                `;
+            }
+            
+            // Cacher le message de bienvenue si présent
+            const welcomeMsg = document.getElementById('welcomeMessage');
+            if (welcomeMsg) {
+                welcomeMsg.style.display = 'none';
+            }
+            
+            messagesArea.appendChild(messageDiv);
+            scrollToBottom();
+        }
+        
+        // Fonction pour faire défiler vers le bas
+        function scrollToBottom() {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        // Fonction pour échapper les caractères HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Envoyer un message via AJAX
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+            
+            // Afficher le message utilisateur
+            addMessage(message, 'user');
+            userInput.value = '';
+            
+            // Afficher l'indicateur de frappe
+            if (typingIndicator) typingIndicator.style.display = 'inline-block';
+            
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({message: message})
+                });
+                
+                const data = await response.json();
+                
+                // Masquer l'indicateur de frappe
+                if (typingIndicator) typingIndicator.style.display = 'none';
+                
+                if (data.response) {
+                    addMessage(data.response, 'bot', data.confidence);
+                } else if (data.error) {
+                    addMessage("Désolé, une erreur s'est produite.", 'bot');
+                }
+                
+            } catch (error) {
+                console.error('Erreur:', error);
+                if (typingIndicator) typingIndicator.style.display = 'none';
+                addMessage("❌ Erreur de connexion au serveur.", 'bot');
+            }
+        }
+        
+        // Effacer l'historique via AJAX
+        async function clearHistory() {
+            if (!confirm('Effacer l\'historique de la conversation ?')) return;
+            
+            try {
+                const response = await fetch('/api/clear', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    // Vider la zone des messages
+                    const userName = document.querySelector('.badge.bg-light.text-dark')?.innerText || 'cher étudiant';
+                    messagesArea.innerHTML = `
+                        <div id="welcomeMessage" class="text-center py-5">
+                            <div class="mb-4">
+                                <i class="fas fa-robot fa-5x text-primary opacity-50"></i>
+                            </div>
+                            <h5 class="text-secondary">Bienvenue sur UniBot, ${escapeHtml(userName)}!</h5>
+                            <p class="text-muted">
+                                Je suis un assistant universitaire intelligent.<br>
+                                Posez-moi vos questions sur la scolarité, les inscriptions,<br>
+                                les relevés de notes, les horaires, les bourses...
+                            </p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+            }
+        }
+        
+        // Événements
+        sendBtn.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+        
+        if (clearHistoryBtn) {
+            clearHistoryBtn.addEventListener('click', clearHistory);
+        }
+        
+        // Questions rapides
+        document.querySelectorAll('.quick-question').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const question = this.getAttribute('data-question');
+                userInput.value = question;
+                sendMessage();
+            });
+        });
+        
+        // Focus sur l'input
+        userInput.focus();
+        
+        // Scroll en bas au chargement
+        scrollToBottom();
+    });
+</script>
+
+{% endblock %}

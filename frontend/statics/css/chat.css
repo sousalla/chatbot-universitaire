@@ -1,0 +1,146 @@
+/* Chat-specific Styles */
+
+/* Chat Container */
+#chatContainer {
+    scroll-behavior: smooth;
+}
+
+/* Messages */
+.message {
+    margin-bottom: 20px;
+    display: flex;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.user-message {
+    justify-content: flex-end;
+}
+
+.bot-message {
+    justify-content: flex-start;
+}
+
+/* Message Content */
+.user-message .message-content {
+    background: linear-gradient(135deg, #4f46e5, #4338ca);
+    color: white;
+    border-radius: 20px 20px 4px 20px;
+    max-width: 75%;
+    padding: 12px 18px;
+    word-wrap: break-word;
+}
+
+.bot-message .message-content {
+    background: white;
+    color: #1f2937;
+    border-radius: 20px 20px 20px 4px;
+    max-width: 75%;
+    padding: 12px 18px;
+    word-wrap: break-word;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Typing Indicator */
+.typing-indicator {
+    display: inline-block;
+    padding: 12px 18px;
+    background: white;
+    border-radius: 20px;
+    color: #6c757d;
+    font-style: italic;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.typing-dots {
+    display: inline-block;
+    width: 20px;
+    text-align: left;
+}
+
+.typing-dots::after {
+    content: '...';
+    animation: typing 1.5s infinite;
+}
+
+@keyframes typing {
+    0%, 20% { content: '.'; }
+    40%, 60% { content: '..'; }
+    80%, 100% { content: '...'; }
+}
+
+/* Quick Questions */
+.quick-btn {
+    transition: all 0.2s ease;
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.quick-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Input */
+#userInput:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.25);
+}
+
+/* Status Banner */
+#statusBanner {
+    transition: opacity 0.3s;
+    cursor: pointer;
+}
+
+/* Welcome Message */
+#welcomeMessage {
+    transition: opacity 0.3s;
+}
+
+/* Code in Messages */
+.message-content pre {
+    background: #f3f4f6;
+    padding: 10px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 12px;
+}
+
+.message-content code {
+    background: #f3f4f6;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 12px;
+}
+
+/* Links */
+.message-content a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+.user-message .message-content a {
+    color: #ffd700;
+}
+
+.bot-message .message-content a {
+    color: #4f46e5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .user-message .message-content,
+    .bot-message .message-content {
+        max-width: 85%;
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+    
+    .quick-btn {
+        font-size: 10px;
+        padding: 6px 8px;
+    }
+}
