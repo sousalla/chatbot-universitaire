@@ -141,23 +141,23 @@ git clone https://github.com/sousalla/chatbot-universitaire.gi
 
 cd chatbot-universitaire
 
-2. Créer l'environnement virtuel
+### 2. Créer l'environnement virtuel
 python -m venv venv
 venv\Scripts\activate   # Windows
 
-3. Installer les dépendances
+### 3. Installer les dépendances
 pip install -r requirements.txt
 
-4. Configurer le token Hugging Face
+### 4. Configurer le token Hugging Face
 Créez un compte sur huggingface.co
 Acceptez les conditions du modèle Gemma-2b-it
 Générez un token sur https://huggingface.co/settings/tokens
 Ajoutez le token dans .env
 
-6. Lancer l'application
+### 6. Lancer l'application
 python run.py
 
-7. Accéder à l'application
+### 7. Accéder à l'application
 Ouvrez votre navigateur et allez à : http://localhost:5000
 
 
@@ -187,7 +187,7 @@ Vie étudiante	"Comment trouver un logement étudiant ?"
 Règlements	"Quel est le taux d'absence maximum ?"
 Pédagogie	"Où trouver mon emploi du temps ?"
 
-Structure du projet
+**Structure du projet
 
 chatbot-universitaire/
 │
