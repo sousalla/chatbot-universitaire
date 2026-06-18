@@ -137,7 +137,6 @@ UniBot est un chatbot intelligent conçu pour assister les étudiants de la Facu
 
 ### 1. Cloner le dépôt
 
-```bash
 git clone https://github.com/sousalla/chatbot-universitaire.gi
 
 cd chatbot-universitaire
