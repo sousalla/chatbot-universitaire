@@ -74,33 +74,43 @@ UniBot est un chatbot intelligent conçu pour assister les étudiants de la Facu
 ---
 
 ##  Architecture technique
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ UTILISATEURS │
-└─────────────────────────────────────────────────────────────────────────────┘
-│
-▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ COUCHE PRÉSENTATION │
-│ Bootstrap 5 + JavaScript + HTML/CSS │
-└─────────────────────────────────────────────────────────────────────────────┘
-│
-▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ COUCHE APPLICATION │
-│ Flask (API REST) │
-└─────────────────────────────────────────────────────────────────────────────┘
-│
-▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ COUCHE TRAITEMENT │
-│ Pipeline RAG + ChromaDB + Gemma-2b-it │
-└─────────────────────────────────────────────────────────────────────────────┘
-│
-▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ COUCHE DONNÉES │
-│ Documents sources + Base vectorielle + Logs │
-└─────────────────────────────────────────────────────────────────────────────┘
+
+```text
+┌──────────────────────────────────────────────────────────────┐
+│                         UTILISATEURS                         │
+└──────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌──────────────────────────────────────────────────────────────┐
+│                    COUCHE PRÉSENTATION                      │
+│              HTML5 • CSS3 • Bootstrap 5 • JS               │
+└──────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌──────────────────────────────────────────────────────────────┐
+│                    COUCHE APPLICATION                       │
+│                     Flask (API REST)                        │
+└──────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌──────────────────────────────────────────────────────────────┐
+│                     COUCHE TRAITEMENT                       │
+│                                                            │
+│  • Pipeline RAG                                            │
+│  • ChromaDB (Recherche vectorielle)                        │
+│  • Gemma-2b-it (Génération de réponses)                    │
+└──────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌──────────────────────────────────────────────────────────────┐
+│                      COUCHE DONNÉES                         │
+│                                                            │
+│  • Documents sources                                       │
+│  • Base vectorielle                                        │
+│  • Logs système                                            │
+└──────────────────────────────────────────────────────────────┘
+```
+
 
 
 ### Pipeline RAG
@@ -133,53 +143,92 @@ UniBot est un chatbot intelligent conçu pour assister les étudiants de la Facu
 
 ---
 
-##  Installation
+# Installation
 
-### 1. Cloner le dépôt
+## 1. Cloner le dépôt
 
-git clone https://github.com/sousalla/chatbot-universitaire.gi
-
+```bash
+git clone https://github.com/sousalla/chatbot-universitaire.git
 cd chatbot-universitaire
+```
 
-### 2. Créer l'environnement virtuel
+## 2. Créer et activer l'environnement virtuel
+
+### Windows
+
+```bash
 python -m venv venv
-venv\Scripts\activate   # Windows
+venv\Scripts\activate
+```
 
-### 3. Installer les dépendances
+### Linux / macOS
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+## 3. Installer les dépendances
+
+```bash
 pip install -r requirements.txt
+```
 
-### 4. Configurer le token Hugging Face
-Créez un compte sur huggingface.co
-Acceptez les conditions du modèle Gemma-2b-it
-Générez un token sur https://huggingface.co/settings/tokens
-Ajoutez le token dans .env
+## 4. Configurer le token Hugging Face
 
-### 6. Lancer l'application
+1. Créer un compte sur Hugging Face.
+2. Accepter les conditions d'utilisation du modèle **Gemma-2b-it**.
+3. Générer un token d'accès.
+4. Créer un fichier `.env` à la racine du projet :
+
+```env
+HF_TOKEN=votre_token_huggingface
+```
+
+## 5. Lancer l'application
+
+```bash
 python run.py
+```
 
-### 7. Accéder à l'application
-Ouvrez votre navigateur et allez à : http://localhost:5000
+## 6. Accéder à l'application
 
+Ouvrez votre navigateur :
 
-Dashboard administrateur
-Accédez à http://localhost:5000/admin avec :
+```text
+http://localhost:5000
+```
 
-Email: admin@usms.ac.ma
+---
 
-Mot de passe: admin123
+# Dashboard Administrateur
 
-Fonctionnalités :
+Accédez à :
 
-Visualiser les statistiques
+```text
+http://localhost:5000/admin
+```
 
-Gérer les utilisateurs
+### Identifiants par défaut
 
-Ajouter/supprimer des documents
+| Champ        | Valeur                                      |
+| ------------ | ------------------------------------------- |
+| Email        | [admin@usms.ac.ma](mailto:admin@usms.ac.ma) |
+| Mot de passe | admin123                                    |
 
-Réindexer la base RAG
+### Fonctionnalités
 
-### Structure du projet
+* Consultation des statistiques
+* Gestion des utilisateurs
+* Ajout et suppression de documents
+* Réindexation de la base vectorielle RAG
+* Suivi des conversations
 
+---
+
+# Structure du projet
+
+```text
 chatbot-universitaire/
 │
 ├── app/                          # Application Flask
@@ -207,56 +256,100 @@ chatbot-universitaire/
 │   ├── model_interface.py
 │   └── gemma_adapter.py
 │
-├── frontend/                     # Interface utilisateur
+├── frontend/
 │   ├── templates/
 │   │   ├── base.html
 │   │   ├── index.html
 │   │   └── admin.html
+│   │
 │   └── static/
 │       ├── css/
 │       └── js/
 │
-├── data/                         # Données
+├── data/
 │   ├── raw/
 │   │   └── documents/
 │   ├── users.json
 │   ├── conversations.json
 │   └── logs/
 │
-├── notebooks/                    # Jupyter notebooks
+├── notebooks/
 ├── requirements.txt
 ├── .env
 ├── run.py
 └── README.md
+```
 
+---
 
-### API Endpoints
+# API Endpoints
 
-POST	/login	Connexion utilisateur
-POST	/register	Inscription
-GET	/logout	Déconnexion
-POST	/send	Envoyer un message (form)
-POST	/api/chat	API chat (JSON)
-GET	/api/status	Statut du système
-GET	/api/admin/users	Liste des utilisateurs (admin)
-DELETE	/api/admin/users/<id>	Supprimer un utilisateur (admin)
-GET	/health	Health check
-Exemple de requête /api/chat
+| Méthode | Endpoint                | Description                             |
+| ------- | ----------------------- | --------------------------------------- |
+| POST    | `/login`                | Connexion utilisateur                   |
+| POST    | `/register`             | Inscription utilisateur                 |
+| GET     | `/logout`               | Déconnexion                             |
+| POST    | `/send`                 | Envoi d'un message via formulaire       |
+| POST    | `/api/chat`             | API de conversation (JSON)              |
+| GET     | `/api/status`           | État du système                         |
+| GET     | `/api/admin/users`      | Liste des utilisateurs (Admin)          |
+| DELETE  | `/api/admin/users/<id>` | Suppression d'un utilisateur            |
+| GET     | `/health`               | Vérification de l'état de l'application |
 
-### Auteur
-AALLA Soufiane : Étudiant en Master D3SI - Faculté Polydisciplinaire de Béni Mellal - Université Sultan Moulay Slimane
+---
 
-### Encadré par : Pr. Ismail KICH
+# Exemple d'utilisation de l'API
 
-### Remerciements
- - Pr. Ismail KICH pour son encadrement et ses précieux conseils
- - Pr. Abdelkrim MAARIR, chef de filière D3SI
- - Tous les enseignants de la spécialité D3SI
- - La Faculté Polydisciplinaire de Béni Mellal
- - Ma famille et mes amis pour leur soutien
+### Requête
 
+```http
+POST /api/chat
+Content-Type: application/json
+```
 
+```json
+{
+  "message": "Quels sont les modules du Master D3SI ?"
+}
+```
 
-### Contact
-Pour toute question : aallasoufiane.al@gmail.com
+### Réponse
+
+```json
+{
+  "response": "Les modules du Master D3SI sont ..."
+}
+```
+
+---
+
+# Auteur
+
+**AALLA Soufiane**
+
+Étudiant en Master D3SI
+Faculté Polydisciplinaire de Béni Mellal
+Université Sultan Moulay Slimane
+
+---
+
+# Encadrement
+
+**Pr. Ismail KICH**
+
+---
+
+# Remerciements
+
+* Pr. Ismail KICH pour son encadrement et ses précieux conseils.
+* Pr. Abdelkrim MAARIR, chef de filière D3SI.
+* L'ensemble des enseignants de la spécialité D3SI.
+* La Faculté Polydisciplinaire de Béni Mellal.
+* Ma famille et mes amis pour leur soutien.
+
+---
+
+# Contact
+
+📧 [aallasoufiane.al@gmail.com](mailto:aallasoufiane.al@gmail.com)
 
