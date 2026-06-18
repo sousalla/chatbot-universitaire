@@ -128,8 +128,8 @@ UniBot est un chatbot intelligent conçu pour assister les étudiants de la Facu
 |---------|----------------------|
 | **Python** | 3.10 ou supérieur |
 | **RAM** | 4 Go (8 Go recommandé) |
-| **Espace disque** | 3 Go |
-| **Système** | Windows / Linux / MacOS |
+| **Espace disque** | 10 Go |
+| **Système** | Windows  |
 
 ---
 
@@ -178,16 +178,7 @@ Ajouter/supprimer des documents
 
 Réindexer la base RAG
 
-Exemples de questions
-Catégorie	Exemple
-Inscriptions	"Comment s'inscrire à l'université ?"
-Examens	"Quand ont lieu les examens ?"
-Bibliothèque	"Quels sont les horaires de la bibliothèque ?"
-Vie étudiante	"Comment trouver un logement étudiant ?"
-Règlements	"Quel est le taux d'absence maximum ?"
-Pédagogie	"Où trouver mon emploi du temps ?"
-
-**Structure du projet
+### Structure du projet
 
 chatbot-universitaire/
 │
@@ -239,9 +230,8 @@ chatbot-universitaire/
 └── README.md
 
 
- API
-Endpoints
-Méthode	Endpoint	Description
+### API Endpoints
+
 POST	/login	Connexion utilisateur
 POST	/register	Inscription
 GET	/logout	Déconnexion
@@ -252,52 +242,21 @@ GET	/api/admin/users	Liste des utilisateurs (admin)
 DELETE	/api/admin/users/<id>	Supprimer un utilisateur (admin)
 GET	/health	Health check
 Exemple de requête /api/chat
-Requête :
 
-json
-{
-    "message": "Comment s'inscrire à l'université ?"
-}
-Réponse :
+### Auteur
+AALLA Soufiane : Étudiant en Master D3SI - Faculté Polydisciplinaire de Béni Mellal - Université Sultan Moulay Slimane
 
-json
-{
-    "response": "L'inscription se fait en ligne sur le portail étudiant...",
-    "confidence": 0.85,
-    "source": "gemma",
-    "success": true
-}
+### Encadré par : Pr. Ismail KICH
 
-
- Auteur
-AALLA Soufiane
-
-Étudiant en Master D3SI
-
-Faculté Polydisciplinaire de Béni Mellal
-
-Université Sultan Moulay Slimane
-
-Encadré par : Pr. Ismail KICH
-
- Soutenance
-Date : Juillet 2026
-
-Lieu : Faculté Polydisciplinaire de Béni Mellal
-
- Remerciements
-Pr. Ismail KICH pour son encadrement et ses précieux conseils
-
-Pr. Abdelkrim MAARIR, chef de filière D3SI
-
-Tous les enseignants de la spécialité D3SI
-
-La Faculté Polydisciplinaire de Béni Mellal
-
-Ma famille et mes amis pour leur soutien
+### Remerciements
+ - Pr. Ismail KICH pour son encadrement et ses précieux conseils
+ - Pr. Abdelkrim MAARIR, chef de filière D3SI
+ - Tous les enseignants de la spécialité D3SI
+ - La Faculté Polydisciplinaire de Béni Mellal
+ - Ma famille et mes amis pour leur soutien
 
 
 
- Contact
+### Contact
 Pour toute question : aallasoufiane.al@gmail.com
 
